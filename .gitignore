@@ -1,0 +1,16 @@
+# Node.js (React)
+extension/node_modules/
+extension/dist/
+extension/.env
+
+# .NET (Backend)
+backend/SmartReader.API/bin/
+backend/SmartReader.API/obj/
+backend/SmartReader.API/appsettings.json
+backend/SmartReader.Tests/bin/
+backend/SmartReader.Tests/obj/
+
+# OS/Editor Specific
+.DS_Store
+.vscode/
+.idea/
