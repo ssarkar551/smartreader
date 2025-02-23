@@ -1,22 +1,30 @@
 import { useState } from "react";
-import browser from "webextension-polyfill";
+/*global chrome*/
 
-export default function Popup() {
+const Popup = () => {
     const [summary, setSummary] = useState("");
 
-    const summarizePage = () => {
-        browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            browser.runtime.sendMessage({ action: "summarizeText", url: tabs[0].url }, (response) => {
-                if (response.summary) setSummary(response.summary);
+    const handleSummarize = async () => {
+        try {
+            const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+            const response = await chrome.runtime.sendMessage({
+                action: "summarizeText",
+                url: tab.url
             });
-        });
+            setSummary(response.summary || "No summary available.");
+        } catch (error) {
+            console.error("Error:", error);
+            setSummary("Failed to summarize.");
+        }
     };
 
     return (
-        <div style={{ padding: "10px", width: "300px" }}>
-            <h3>Smart Reading Mode</h3>
-            <button onClick={summarizePage}>Summarize Page</button>
+        <div style={{ width: 300, padding: 20 }}>
+            <h2>Smart Reading Mode</h2>
+            <button onClick={handleSummarize}>Summarize Page</button>
             <p>{summary}</p>
         </div>
     );
-}
+};
+
+export default Popup;

@@ -1,8 +1,10 @@
-import browser from 'webextension-polyfill';
+//import browser from 'webextension-polyfill';
 
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+/*global chrome*/
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "summarizeText") {
-        fetch("http://localhost:5000/api/readability/extract", {
+        fetch("http://127.0.0.1:5000/api/extract", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ url: request.url })

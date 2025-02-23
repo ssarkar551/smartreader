@@ -1,4 +1,4 @@
-import browser from 'webextension-polyfill';
+/*global chrome*/
 
 (() => {
     function extractText() {
@@ -6,12 +6,31 @@ import browser from 'webextension-polyfill';
         return Array.from(paragraphs).map(p => p.innerText).join("\n");
     }
 
-    browser.runtime.sendMessage({ action: "summarizeText", url: window.location.href }, (response) => {
-        if (response.summary) {
+    const text = extractText(); // Extract text
+
+    // Ensure browser compatibility (Chrome and Firefox)
+    //const browserAPI = window.chrome ? chrome : browser;
+
+    // Send extracted text and URL to background script
+    chrome.runtime.sendMessage({ action: "summarizeText", url: window.location.href, text }, (response) => {
+        if (response && response.summary) {
             let div = document.createElement("div");
             div.innerText = response.summary;
-            div.style = "position:fixed; top:10px; left:10px; width:300px; background:#fff; padding:10px; border-radius:5px;";
+            div.style = `
+                position: fixed; 
+                top: 10px; 
+                left: 10px; 
+                width: 300px; 
+                background: rgba(255, 255, 255, 0.9);
+                padding: 10px;
+                border-radius: 5px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                z-index: 9999;
+            `;
             document.body.appendChild(div);
+        } else {
+            console.error("No summary received.");
         }
     });
 })();
+
