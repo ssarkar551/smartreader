@@ -21,7 +21,7 @@
                 top: 13px; 
                 margin-left: auto; 
                 margin-right: auto;
-                max-width: 50%; 
+                max-width: fit-content; 
                 background: rgba(255, 255, 255, 0.9);
                 padding: 10px;
                 border-radius: 5px;
